@@ -1,0 +1,34 @@
+<html>
+	<head>
+		<title>upload</title>
+		<style>
+
+		</style>
+		<script src='./tool/upload.js'></script>
+		<script src='./tool/toast.js'></script>
+	</head>
+	<body>
+		<!-- <input id='file' type="file"> -->
+		<!-- <img id='img'> -->
+	</body>
+	<script>
+		// var u = new Upload()
+		// u.init({
+		// 	trigger: 'file',
+		// 	imgHeight: 200,
+		// 	complete: function () {
+		// 		document.getElementById('img').src = this.files[0]
+		// 		this.files = []
+		// 	}
+		// })
+		// u.submit()
+		
+		var t = new Toast()
+		t.init({'top':'50%'}, 'toast...')
+
+		document.addEventListener('click', _=>{
+			if (t.isHide)  t.show()
+			else t.hide()
+		})
+	</script>
+</html>
