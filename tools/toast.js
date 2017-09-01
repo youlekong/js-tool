@@ -33,11 +33,6 @@ const DEFAULT_STYLE = {
 	'right': '0',
 }
 
-function Toast () {
-	this._toastDom = {}
-	this.isHide = false
-}
-
 ;(function (f) {
 	if (typeof exports === "object" && typeof module !== "undefined") {
         module.exports = f();
@@ -57,6 +52,13 @@ function Toast () {
         g.Toast = f();
     }
 })(function () {
+	function Toast (text, options) {
+		this._toastDom = {}
+		this.timeout = 0
+
+		this.init(options, text)
+	}
+
 	Toast.prototype.init = function(options, text){
 
 		var el = document.createDocumentFragment()
@@ -77,15 +79,18 @@ function Toast () {
 
 		this._toastDom = wrap
 		document.body.appendChild(this._toastDom)
+
+		this.show()
 	}
 
 	Toast.prototype.show = function () {
-		this.isHide = false
 		Toast.prototype._appendStyles(this._toastDom, Transitions['SHOW'])
+
+		clearTimeout(this.timeout)
+		this.timeout = setTimeout(Toast.prototype.hide.bind(this), 2000)
 	}
 
 	Toast.prototype.hide = function () {
-		this.isHide = true
 		Toast.prototype._appendStyles(this._toastDom, Transitions['HIDE'])
 	}
 

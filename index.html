@@ -4,8 +4,8 @@
 		<style>
 
 		</style>
-		<script src='./tool/upload.js'></script>
-		<script src='./tool/toast.js'></script>
+		<script src='./tools/upload.js'></script>
+		<script src='./tools/toast.js'></script>
 	</head>
 	<body>
 		<!-- <input id='file' type="file"> -->
@@ -23,12 +23,7 @@
 		// })
 		// u.submit()
 		
-		var t = new Toast()
-		t.init({'top':'50%'}, 'toast...')
+		var t = new Toast('toast...', {'top':'50%'})
 
-		document.addEventListener('click', _=>{
-			if (t.isHide)  t.show()
-			else t.hide()
-		})
 	</script>
 </html>
