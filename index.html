@@ -6,6 +6,7 @@
 		</style>
 		<script src='./tools/upload.js'></script>
 		<script src='./tools/toast.js'></script>
+		<script src='./tools/storage.js'></script>
 	</head>
 	<body>
 		<!-- <input id='file' type="file"> -->
@@ -23,7 +24,15 @@
 		// })
 		// u.submit()
 		
-		var t = new Toast('toast...', {'top':'50%'})
+		var t = new Toast()
+		t.show('toast...', _=>{
+			console.log('1111')
+		})
+		setTimeout(_=>t.show('toast...'), 4000)
+
+		// storage.set('name', 'koyole')
+		// console.log(storage.get('name'))
+
 
 	</script>
 </html>

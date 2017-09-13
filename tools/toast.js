@@ -31,6 +31,7 @@ const DEFAULT_STYLE = {
 	'position': 'fixed',
 	'left': '0',
 	'right': '0',
+	'top': '50%'
 }
 
 ;(function (f) {
@@ -52,14 +53,15 @@ const DEFAULT_STYLE = {
         g.Toast = f();
     }
 })(function () {
-	function Toast (text, options) {
+	function Toast (options) {
 		this._toastDom = {}
 		this.timeout = 0
+		this.callback = function () {}
 
-		this.init(options, text)
+		this.init(options)
 	}
 
-	Toast.prototype.init = function(options, text){
+	Toast.prototype.init = function(options){
 
 		var el = document.createDocumentFragment()
 		var wrap = document.createElement('div')
@@ -72,18 +74,16 @@ const DEFAULT_STYLE = {
 
 		this._appendStyles(wrap, styles)
 
-		txt.innerText = text
-
 		wrap.appendChild(txt)
 		el.appendChild(wrap)
 
 		this._toastDom = wrap
 		document.body.appendChild(this._toastDom)
-
-		this.show()
 	}
 
-	Toast.prototype.show = function () {
+	Toast.prototype.show = function (text, callback) {
+		this._toastDom.getElementsByTagName('span')[0].innerText = text
+		if(typeof callback === 'function') this.callback = callback
 		Toast.prototype._appendStyles(this._toastDom, Transitions['SHOW'])
 
 		clearTimeout(this.timeout)
@@ -92,6 +92,8 @@ const DEFAULT_STYLE = {
 
 	Toast.prototype.hide = function () {
 		Toast.prototype._appendStyles(this._toastDom, Transitions['HIDE'])
+		this.callback()
+		this.callback = function () {}
 	}
 
 	Toast.prototype._appendStyles = function(el, options){
