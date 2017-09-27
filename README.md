@@ -3,6 +3,7 @@
 **常用js类**
 
 - 图片上传
+
 ```
 var u = new Upload()
 u.init({
@@ -16,7 +17,9 @@ u.init({
 u.submit()
 ```
 
-```页面提示
+- 页面提示
+
+```
 var t = new Toast()
 t.show('toast...', _=>{
 	console.log('1111')
@@ -24,11 +27,15 @@ t.show('toast...', _=>{
 setTimeout(_=>t.show('toast...'), 4000)
 ```
 
-```localStorage存储
+- localStorage存储
+
+```
 storage.set('name', 'koyole')
 console.log(storage.get('name'))
 ```
 
-```轮播图
+- 轮播图
+
+```
 swiper('cardflip', {})
 ```
