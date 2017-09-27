@@ -2,15 +2,40 @@
 	<head>
 		<title>upload</title>
 		<style>
-
+			#cardflip {
+		      width: 400px;
+		      height: 400px;
+		      overflow: hidden;
+		    }
+		    .slide1 {
+		      background-color: #ff0;
+		    }
+		    .slide2 {
+		      background-color: #f00;
+		    }
+		    .slide3 {
+		      background-color: #0f0;
+		    }
+		    .slide4 {
+		      background-color: #0ff;
+		    }
 		</style>
 		<script src='./tools/upload.js'></script>
 		<script src='./tools/toast.js'></script>
 		<script src='./tools/storage.js'></script>
+		<script src="./tools/swiper.js"></script>
 	</head>
 	<body>
 		<!-- <input id='file' type="file"> -->
 		<!-- <img id='img'> -->
+		<div id="cardflip">
+		    <div>
+		     	<div class="slide slide1">1</div>
+		      	<div class="slide slide2">2</div>
+		      	<div class="slide slide3">3</div>
+		      	<div class="slide slide4">4</div>
+		    </div>
+		</div>
 	</body>
 	<script>
 		// var u = new Upload()
@@ -24,15 +49,16 @@
 		// })
 		// u.submit()
 		
-		var t = new Toast()
-		t.show('toast...', _=>{
-			console.log('1111')
-		})
-		setTimeout(_=>t.show('toast...'), 4000)
+		// var t = new Toast()
+		// t.show('toast...', _=>{
+		// 	console.log('1111')
+		// })
+		// setTimeout(_=>t.show('toast...'), 4000)
 
 		// storage.set('name', 'koyole')
 		// console.log(storage.get('name'))
 
+		swiper('cardflip', {})
 
 	</script>
 </html>
