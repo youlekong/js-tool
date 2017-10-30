@@ -24,18 +24,26 @@
 		<script src='./tools/toast.js'></script>
 		<script src='./tools/storage.js'></script>
 		<script src="./tools/swiper.js"></script>
+		<script src='./tools/FormValidate.js'></script>
 	</head>
 	<body>
 		<!-- <input id='file' type="file"> -->
 		<!-- <img id='img'> -->
-		<div id="cardflip">
+		<!-- <div id="cardflip">
 		    <div>
 		     	<div class="slide slide1">1</div>
 		      	<div class="slide slide2">2</div>
 		      	<div class="slide slide3">3</div>
 		      	<div class="slide slide4">4</div>
 		    </div>
-		</div>
+		</div> -->
+		<form id='f1' onsubmit="return false">
+			<label for="nickname">nickname</label>
+			<input type="text" id="nickname" name="nickname">
+			<label for="pwd">pwd</label>
+			<input type="password" id="pwd" name="pwd">
+			<input type="submit" onclick="formSubmit()">
+		</form>
 	</body>
 	<script>
 		// var u = new Upload()
@@ -58,7 +66,24 @@
 		// storage.set('name', 'koyole')
 		// console.log(storage.get('name'))
 
-		swiper('cardflip', {})
+		// swiper('cardflip', {})
+		
+		function formSubmit() {
+			var nn = document.getElementById('nickname').value
+			var pwd = document.getElementById('pwd').value
+
+			var rules = {
+				'nn|昵称': 'required|trim|is_numeric',
+				'pwd|密码': 'required|trim|is_numeric',
+			}
+			var form = new FormValidate({nn, pwd})
+			form.set_rules(rules)
+			if (!form.validate()) 
+				console.log(form.error_string())
+
+			var rs = form.get_validation_data()
+			console.log(rs)
+		}
 
 	</script>
 </html>
