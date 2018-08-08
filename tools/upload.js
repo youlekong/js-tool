@@ -136,7 +136,7 @@
 					try {
 						var res = JSON.parse(xhr.responseText)
 					} catch(e) {}
-					if(typeof cb === 'function') cb()
+					if(typeof cb === 'function') cb(res)
 				} else {}
 			};
 			xhr.send(fd);
