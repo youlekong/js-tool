@@ -35,11 +35,30 @@
         }
     </style>
 </head>
-<body>
+<body class="modal-open">
     <div class="container">
         <div class="dialog">
             <div class="content">asdasdsd</div>
         </dialog>
     </div>
 </body>
+<script>
+    var modalHelper = (function(bodyCls) {
+        var scrollTop;
+        return {
+            afterOpen: function() {
+                scrollTop = document.scrollingElement.scrollTop;
+                document.body.classList.add(bodyCls);
+                document.body.style.top = -scrollTop + 'px';
+            },
+            beforeClose: function() {
+                document.body.classList.remove(bodyCls);
+                // scrollTop lost after set position:fixed, restore it back.
+                document.scrollingElement.scrollTop = scrollTop;
+            }
+      };
+    })('modal-open');
+    // modalHelper.afterOpen();
+    // modalHelper.beforeClose();
+</script>
 </html>
