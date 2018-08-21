@@ -1,0 +1,112 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>Document</title>
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            font-size: 0.2rem;
+        }
+        #content {
+            min-height: 100%;
+            margin-bottom: -1rem;
+        }
+        #footer {
+            overflow: hidden;
+            line-height: 1rem;
+            text-align: center;
+        }
+        #footer span {
+            float: right;
+            color: #fff;
+            background-color: #f00;
+            height: 1rem;
+            padding: 0 0.5rem;
+        }
+        .product {
+            border-radius: 50%;
+            width: 1rem;
+            height: 1rem;
+            position: absolute;
+            transition: transform .5s;
+            transition-timing-function: cubic-bezier(.55, 0, .85, .36);
+        }
+        .product span {
+            position: absolute;
+            width: 100%;
+            line-height: 1rem;
+            transition: transform .5s;
+            transition-timing-function: linear;
+            text-align: center;
+        }
+    </style>
+    <script>
+        (function (doc, win) {
+            var docEl = doc.documentElement,
+            resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+            recalc = function () {
+                var clientWidth = docEl.clientWidth;
+                if (!clientWidth) return; 
+                if(clientWidth>=640){
+                    docEl.style.fontSize='80px';
+                }else{
+                    docEl.style.fontSize = 40 * (clientWidth / 320) + 'px';
+                }       
+            };
+            if (!doc.addEventListener) return;
+                win.addEventListener(resizeEvt, recalc, false);
+                doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+</head>
+<body>
+    <div id="content">
+        <div class="product"><span>商品</span></div>
+    </div>
+    <div id="footer"><span>加入购物车</span></div>
+</body>
+<script>
+    var prod = document.querySelector('.product');
+    var prodImg = prod.querySelector('span');
+
+    prod.addEventListener('touchmove', function(e) {
+        var point = e.touches[0];
+        var x = point.clientX,
+            y = point.clientY;
+        updateProdPosition(x, y);
+    }, false);
+
+    function updateProdPosition(x, y) {
+        var p = prod.getBoundingClientRect();
+        var w = document.documentElement.clientWidth - p.width,
+            h = document.documentElement.clientHeight - p.height;
+        x > w ? x = w : x;
+        y > h ? y = h : y;
+        x <= 0 ? x = 0 : x;
+        y <= 0 ? y = 0 : y;
+
+        prod.style.top = y + 'px';
+        prod.style.left = x + 'px';
+    }
+
+    prod.addEventListener('click', function(e) {
+        var p = prod.getBoundingClientRect(),
+            f = document.querySelector('#footer span').getBoundingClientRect();
+        
+        var dx = (p.left + p.width / 2) - (f.left + f.width / 2),  
+            dy = (p.top + p.height / 2) - (f.top + f.height / 2);
+        
+        prodImg.style.transform = 'translateX(' + Math.abs(dx) + 'px)';
+        prod.style.transform = 'translateY(' + Math.abs(dy) + 'px)';
+
+        // setTimeout(function () {
+            // prodImg.style.transform = 'translateX(0)';
+            // prod.style.transform = 'translateY(0)';
+        // }, 490);
+    }, false);
+
+</script>
+</html>
