@@ -1,0 +1,129 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>Document</title>
+    <style>
+        .container {
+            width: 3rem;
+            height: 1rem;
+            background-color: #eee;
+            overflow: hidden;
+            margin: auto;
+        }
+        .wrapper {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            width: 9rem;
+            height: 100%;
+        }
+        .item {
+            float: left;
+            width: 3rem;
+            height: 100%;
+        }
+        .item:nth-child(1) {
+            background-color: #f0f;
+        }
+        .item:nth-child(2) {
+            background-color: #0f0;
+        }
+        .item:nth-child(3) {
+            background-color: #f00;
+        }
+    </style>
+    <script>
+        ;(function(win, doc) {
+            if (!doc.addEventListener) 
+                return ;
+
+            var evt = 'orientationchange' in window ? 'orientationchange' : 'resize';
+            win.addEventListener(evt, updateWin, false);
+
+            function updateWin() {
+                var winWidth = window.innerWidth;
+                var size = (winWidth / 750) * 100;
+                doc.documentElement.style.fontSize = (size < 100 ? size : 100) + 'px';
+            };
+            updateWin();
+        })(window, document);
+    </script>
+</head>
+<body>
+    <div class="container">
+        <ul class="wrapper">
+            <li class="item"></li>
+            <li class="item"></li>
+            <li class="item"></li>
+        </ul>
+    </div>
+</body>
+<script>
+    var el = document.querySelector('.wrapper');
+    var w = el.children[0].getBoundingClientRect().width;
+    var pages = el.children.length;
+
+    var sx, sy, mx, my, dx, _x;
+    var curPage = 0, speed = 300;
+    el.addEventListener('touchstart', start, false);
+
+    function start(e) {
+        var t = e.touches[0];
+        sx = t.clientX, sy = t.clientY;
+
+        el.style.transitionDuration = 0 + 'ms';
+
+        el.addEventListener('touchmove', move, false);
+        el.addEventListener('touchend', end, false);
+    }
+    function move(e) {
+        var t = e.touches[0];
+        mx = t.clientX, my = t.clientY;
+
+        dx = mx - sx;
+
+        _x = curPage * (-w) + dx;
+        el.style.transform = 'translateX(' + _x + 'px)';
+    }
+    function end(e) {
+        if (Math.abs(dx) > w/2) {
+            if (dx > 0)
+                curPage = circle(curPage) - 1;
+            else if (dx < 0)
+                curPage = circle(curPage) + 1;
+        } else {
+            curPage = circle(curPage);
+        }
+
+        if (_x > 0) {
+            el.style.transform = 'translateX(' + 0 + 'px)';
+            el.style.transitionDuration = speed + 'ms';
+            curPage = 0;
+            return ;
+        }
+
+        if ( _x < -w * (pages-1) ) {
+            el.style.transform = 'translateX(' + -w * (pages-1) + 'px)';
+            el.style.transitionDuration = speed + 'ms';
+            curPage = pages-1;
+            return;
+        }
+
+        if (_x > -w/2 - curPage * w) {
+            el.style.transform = 'translateX(' + -w * (curPage) + 'px)';
+            el.style.transitionDuration = speed + 'ms';
+        } else if (_x < -w - curPage * w) {
+            el.style.transform = 'translateX(' + -w * (curPage) + 'px)';
+            el.style.transitionDuration = speed + 'ms';
+        }
+
+
+        el.removeEventListener('touchmove', move, false);
+        el.removeEventListener('touchend', end, false);
+    }
+    function circle(index) {
+        return (pages + (index % pages)) % pages;
+    }
+</script>
+</html>
