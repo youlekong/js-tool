@@ -33,10 +33,18 @@
             padding: 20px;
             word-wrap:break-word;
         }
+        body.modal-open {
+            position: fixed;
+            width: 100%;
+        }
     </style>
 </head>
-<body class="modal-open">
-    <div class="container">
+<body>
+    <div style="width: 100%; height: 1000px; background: #f00; position: relative;">
+      <button style="font-size: 50px;position: absolute;top: 500px;">show</button>
+    </div>
+    <div style="width: 100%; height: 1000px; background: #ff0;"></div>
+    <div class="container" style="display: none;">
         <div class="dialog">
             <div class="content">asdasdsd</div>
         </dialog>
@@ -60,5 +68,23 @@
     })('modal-open');
     // modalHelper.afterOpen();
     // modalHelper.beforeClose();
+    document.querySelector('button').addEventListener('click', function() {
+      if ( document.body.classList.length <= 0 ) {
+        document.querySelector('.container').style.display = 'block';
+        modalHelper.afterOpen();
+      } else {
+        document.querySelector('.container').style.display = 'none';
+        modalHelper.beforeClose();
+      }
+    })
+    document.querySelector('.container').addEventListener('click', function() {
+      if ( document.body.classList.length <= 0 ) {
+        document.querySelector('.container').style.display = 'block';
+        modalHelper.afterOpen();
+      } else {
+        document.querySelector('.container').style.display = 'none';
+        modalHelper.beforeClose();
+      }
+    })
 </script>
 </html>
