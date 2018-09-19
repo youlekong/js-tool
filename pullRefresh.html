@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+ 
+        #refreshContainer li {
+            background-color: #eee;
+            margin-bottom: 1px;
+            padding: 20px 10px;
+        }
+ 
+        .refreshText {
+            position: absolute;
+            width: 100%;
+            line-height: 50px;
+            text-align: center;
+            left: 0;
+            top: 0;
+            transform: translateY(-50px);
+        }
+        .refreshText2 {
+            position: absolute;
+            width: 100%;
+            line-height: 50px;
+            text-align: center;
+            left: 0;
+            bottom: 0;
+            transform: translateY(50px);
+        }
+    </style>
+</head>
+ 
+<body>
+    <main class="parent">
+        <p class="refreshText"></p>
+        <ul id="refreshContainer">
+            <li>111</li>
+            <li>222</li>
+            <li>333</li>
+            <li>444</li>
+            <li>555</li>
+            <li>111</li>
+            <li>222</li>
+            <li>333</li>
+            <li>444</li>
+            <li>555</li>
+            <li>111</li>
+            <li>222</li>
+            <li>333</li>
+            <li>444</li>
+            <li>555</li>
+        </ul>
+        <p class="refreshText2"></p>
+    </main>
+    <script type="text/javascript">
+        window.onload = function(){
+            let refreshText2 = document.querySelector('.refreshText2');
+            // 监听页面滚动
+            document.addEventListener('scroll', function(e) {
+                var scr = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop
+                
+                // 当页面高度 + 滚动高度 === 文档整体高度时为滚动至底部 执行异步加载方法等等
+                if (window.innerHeight + scr + 50 >= document.body.scrollHeight) {
+                    refreshText2.innerHTML = "加载中...";
+                    setTimeout(function() {
+                        refreshText2.innerHTML = "加载完成...";
+                        document.querySelector('.parent').style.transform = "translateY(50)";
+                        document.querySelector('.parent').style.transition = "all ease 0.5s";
+                    }, 2000)
+                }
+            })
+            //1.获取到列表的dom，刷新显示部分的dom，列表父容器的dom
+            let container = document.querySelector('#refreshContainer');
+            let refreshText = document.querySelector('.refreshText');
+            let parent = document.querySelector('.parent');
+ 
+            //2.定义一些需要常用的变量
+            let startY = 0;//手指触摸最开始的Y坐标
+            let endY = 0;//手指结束触摸时的Y坐标
+            let _y = 0;
+            
+            //3.给列表dom监听touchstart事件,得到起始位置的Y坐标
+            parent.addEventListener('touchstart', _start);
+            
+            function isTop(){
+                var t = document.documentElement.scrollTop||document.body.scrollTop;
+                return t === 0 ? true : false;
+            }
+
+            function _start(e){
+                startY = e.touches[0].pageY;
+
+                //4.给列表dom监听touchmove事件，当移动到一定程度需要显示上面的文字
+                parent.addEventListener('touchmove', _move);
+                //5.给列表dom监听touchend事件，此时说明用户已经松开了手指，应该进行异步操作了
+                parent.addEventListener('touchend', _end);
+            }
+            function _move(e) { 
+                if (!isTop())
+                    return ;
+
+                _y = e.touches[0].pageY-startY 
+                if(isTop() && (e.touches[0].pageY-startY) > 50){
+                    console.log('下拉了');
+                    refreshText.style.height = "50px";
+                    parent.style.transform = "translateY(50px)";
+                    // parent.style.transition = "all ease 0.5s";
+                    refreshText.innerHTML = "释放立即刷新...";
+                } else {
+                    parent.style.transform = "translateY(" + (e.touches[0].pageY-startY).toString() + "px)";
+                }
+            }
+            function _end(e) { 
+                console.log(_y)
+                if (_y < 50) {
+                    parent.style.transform = "translateY(0)";
+                    parent.style.transition = "all ease 0.5s";
+                    return ;
+                }
+
+                console.log('松开了')
+                if(isTop()){
+                    refreshText.innerHTML = "正在刷新...";
+                    var timer = setTimeout(function(){
+                        parent.style.transform = "translateY(0)";
+                        parent.style.transition = "all ease 0.5s";
+                        console.log('成功刷新');
+                        clearTimeout(timer);
+                    },1000)
+                }
+
+
+                // parent.removeEventListener('touchstart', _start);
+                parent.removeEventListener('touchmove', _move);
+                parent.removeEventListener('touchend', _end);
+                return;
+            }
+ 
+        }
+    </script>
+</body>
+ 
+</html>
