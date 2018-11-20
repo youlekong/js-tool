@@ -1,0 +1,105 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <div class="wrapper">
+        <canvas id='canvas' width="400" height="400" style="background: #333;"></canvas>
+    </div>
+</body>
+<script>
+    var balls = [];
+    var canvas = document.getElementById('canvas'),
+            ctx = canvas.getContext('2d');
+
+    var bounce = -0.5; //反弹系数
+    var spring = 0.03;
+
+    function Ball(x, y, radius) {
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.angle = Math.random() * 180;
+        this.speed = 5;
+    }
+
+    Ball.prototype.draw = function(ctx){
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+        ctx.closePath();
+        ctx.fillStyle = '#fff';
+        ctx.fill();
+    }
+
+    function animation() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        balls.forEach(function(ball, i) {
+
+            //检测球之间碰撞
+            for(var j = 0; j < balls.length; j++){
+                // if (i != j) checkCollision(ball, balls[j]);
+            };
+
+            // if ( (ball.x + ball.radius) > canvas.width || ball.x < (0 + ball.radius) )
+                // ball.speed = -ball.speed;
+            // 判断与墙壁的碰撞反弹
+            if (ball.x + ball.radius > canvas.width) {
+                ball.angle = 180 - ball.angle
+            }
+            if (ball.x - ball.radius < 0) {
+                ball.angle = -(180 + ball.angle)
+            }
+            if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
+                ball.angle = -ball.angle
+            }
+
+            // ball.x += ball.speed;
+            // 计算小球下一帧的坐标
+            ball.x += ball.speed * Math.cos(ball.angle * Math.PI / 180)
+            ball.y -= ball.speed * Math.sin(ball.angle * Math.PI / 180)
+
+            ball.draw(ctx);
+        });
+
+        requestAnimationFrame(animation);
+    }
+
+    function checkCollision(ballA, ballB) {
+        var dx = ballA.x - ballB.x;
+        var dy = ballA.y - ballB.y;
+
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        var min_dist = ballB.radius + ballA.radius;
+
+        if(dist < min_dist) {
+            var angle = Math.atan2(dy, dx);
+            // console.log(Math.cos(angle), Math.sin(angle))
+            ballB.x = ballB.x - Math.cos(angle) * min_dist;
+            ballB.y = ballB.y - Math.sin(angle) * min_dist;
+            ballA.x = ballA.x + Math.cos(angle) * min_dist;
+            ballA.y = ballA.y + Math.sin(angle) * min_dist;
+        };
+    }
+
+    window.onload = function(){
+        ctx.strokeRect(0, 0, canvas.width, canvas.height);
+            
+        for (let i = 0; i < 3; i++) {
+            // 我们让小球的半径和坐标都随机一下
+            const radius = Math.random() * 20 + 10 // 10 ~ 30
+            const x = Math.random() * (canvas.width - radius - radius) + radius
+            const y = Math.random() * (canvas.height - radius - radius) + radius
+
+            balls.push(new Ball(x, y, radius))
+        }
+
+        // var ball = new Ball(canvas.width / 2, canvas.height / 2, 20);
+        // balls.push(ball);
+
+        animation();
+    }
+
+</script>
+</html>
