@@ -1,0 +1,34 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>copy</title>
+</head>
+<body>
+    <p class="copy-text">copy it!</p>
+    <span class="copy-btn">click it</span>
+</body>
+<script>
+    // function doCopy(el, callback) {
+    //     document.querySelector('.copy-btn').addEventListener('click', doCopy, false);
+    // }
+
+    document.querySelector('.copy-btn').addEventListener('click', doCopy, false);
+
+    function doCopy() {
+        var el = document.querySelector('.copy-text');
+
+        const range = document.createRange();
+        range.selectNode(el);
+
+        const selection = window.getSelection();
+        if(selection.rangeCount > 0) selection.removeAllRanges();
+        selection.addRange(range);
+        
+        var rs = document.execCommand('copy');
+        selection.removeAllRanges();
+
+        rs && console.log('copy complete!')
+    }
+</script>
+</html>
