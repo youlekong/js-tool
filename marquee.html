@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>文字无缝滚动</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0
+		}
+		#scroll_div {
+            height:30px;
+            overflow: hidden;
+            white-space: nowrap;
+            width:500px;
+            background-color: #fff;
+            color: #999999;
+            margin: 1rem 0rem;
+            text-align: center;
+            margin: 0 auto;
+            border: 1px solid #f00;
+        }
+        #scroll_begin,#scroll_end {
+            display: inline;
+        }
+
+	</style>
+</head>
+<body>
+	    <div id="scroll_div" class="fl">
+            <div id="scroll_begin">
+                尊敬的用户，您好！<span class="pad_right">感谢您的长期支持，本平台目前提供的通道带积分，支持大部分银行，欢迎您的使用！</span>
+                表示数据模板！<span class="pad_right">关于mock.js的介绍也这么多，这些基本上是根据官文摘抄，但是基本上够我们日常使用。</span>
+                <!-- 尊敬的用户，您好！<span class="pad_right">感谢您的长期支持，本平台目前提供的通道带积分，支持大部分银行，欢迎您的使用！</span> -->
+                <!-- 尊敬的用户，您好！<span class="pad_right">感谢您的长期支持，本平台目前提供的通道带积分，支持大部分银行，欢迎您的使用！</span> -->
+                <!-- 尊敬的用户，您好！<span class="pad_right">感谢您的长期支持，本平台目前提供的通道带积分，支持大部分银行，欢迎您的使用！</span> -->
+                <!-- 尊敬的用户，您好！<span class="pad_right">感谢您的长期支持，本平台目前提供的通道带积分，支持大部分银行，欢迎您的使用！</span> -->
+     
+            </div>
+            <div id="scroll_end"></div>
+        </div>
+
+</body>
+<script>  
+	//文字横向滚动
+    function scrollImgLeft(){
+        var timeoutId = -1;
+        var speed = 50;//初始化速度 也就是字体的整体滚动速度
+        var myMar = null;//初始化一个变量为空 用来存放获取到的文本内容
+        var scroll_begin = document.getElementById("scroll_begin");//获取滚动的开头id
+        var scroll_end = document.getElementById("scroll_end");//获取滚动的结束id
+        var scroll_div = document.getElementById("scroll_div");//获取整体的开头id
+        scroll_end.innerHTML = scroll_begin.innerHTML;//滚动的是html内部的内容,原生知识!
+
+        // console.log(scroll_end.offsetWidth, scroll_begin.offsetWidth, scroll_div.offsetWidth, scroll_div.scrollLeft)
+        function marquee(){
+            if (scroll_end.offsetWidth - scroll_div.scrollLeft <= 0) {
+                scroll_div.scrollLeft -= scroll_begin.offsetWidth;
+                clearInterval(myMar);
+
+                if (timeoutId > 0) clearTimeout(timeoutId);
+                timeoutId = setTimeout(scrollImgLeft, 5000)
+            } else {
+                scroll_div.scrollLeft++;
+            }
+        }
+        myMar = setInterval(marquee, speed);
+        // scroll_div.onmouseover = function(){
+        //     clearInterval(myMar);
+        // }
+
+        // scroll_div.onmouseout = function(){
+        //     myMar = setInterval(marquee,speed);
+        // }
+    }
+    scrollImgLeft();
+
+</script> 
+
+</html> 
